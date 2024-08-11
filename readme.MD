@@ -1,34 +1,25 @@
 This is a basic layout for microservices projects using net/http package of **go 1.22** based on what I had at my past
-company. We used gin gonic, but with new release of net/http package of go1.22, I want to make a new template for it as
-it is faster way more simpler to use than gin gonic for simple web server.
+company. We used gin gonic back then, but with the new upgrade of net/http package in go 1.22, I want to make a new template for it as
+it is faster way more simpler compares to gin-gonic for a simple web server usage.
 
 This can be used with other http packages, you just have to change code in cmd and internal/response to match with your
 package.
 
 ### Project structure
-
+This project structure is created based on suggestion from go team `https://go.dev/doc/modules/layout` and my experience in writing go microservices.
 ```|-- .
 |-- cmd
-|   |-- cmd/service_A
-|   |   |-- service_A.go
+|   |-- service_A
 |-- internal
 |   |-- config
-|   |   |-- config.go
 |   |-- db
-|   |   |-- mongo.go
-|   |   |-- mysql.go
 |   |-- response
-|   |   |-- response.go
 |-- pkg
-|   |-- pkg/service_A
+|   |-- service_A
 |   |   |-- controllers
-|   |   |   |-- controller.go
 |   |   |-- models
 |   |   |-- repository
-|   |   |   |-- mongo.go
-|   |   |   |-- mysql.go
 |   |   |-- services
-|   |   |   |-- service.go
 |-- go.mod
 |-- go.sum
 ```
@@ -36,7 +27,7 @@ package.
 ### Explanation
 
 1. **cmd**: main file of each microservices
-2. **internal**: common packages
+2. **internal**: common packages between services
     1. **config**: using package `github.com/kelseyhightower/envconfig` for to manage all environment variables. It is
        pretty simple to use and make our codes cleaner.
     2. **db**: simple code to connect to your databases. It will automatically get env config so in main file.
