@@ -1,3 +1,5 @@
+### Simple golang template for microservices using go 1.22 net/http package
+
 This is a basic layout for microservices projects using net/http package of **go 1.22** based on what I had at my past
 company. We used gin gonic back then, but with the new upgrade of net/http package in go 1.22, I want to make a new
 template for it as
