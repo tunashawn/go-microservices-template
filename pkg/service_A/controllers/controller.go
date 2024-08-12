@@ -29,10 +29,15 @@ func NewController() (Controller, error) {
 	// TODO: uncomment above and delete below to use services and deeper level of code
 	return &ControllerImpl{
 		response: response.CustomResponse{},
-		service:  nil,
+		service:  &services.ServiceImpl{},
 	}, nil
 }
 
 func (c *ControllerImpl) Ping(w http.ResponseWriter, r *http.Request) {
-	c.response.Success("pong", w)
+	data, err := c.service.Ping()
+	if err != nil {
+		c.response.InternalServerError(err, w, r)
+		return
+	}
+	c.response.Success(data, w, r)
 }

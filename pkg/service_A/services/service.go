@@ -6,11 +6,16 @@ import (
 )
 
 type Service interface {
+	Ping() (string, error)
 }
 
 type ServiceImpl struct {
 	mongo repository.MongoRepository
 	sql   repository.SqlRepository
+}
+
+func (s *ServiceImpl) Ping() (string, error) {
+	return "", errors.New("something happened")
 }
 
 func NewService() (Service, error) {

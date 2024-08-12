@@ -1,7 +1,10 @@
 package response
 
 import (
+	"context"
 	"encoding/json"
+	"io"
+	"log/slog"
 	"net/http"
 )
 
@@ -17,63 +20,84 @@ type Meta struct {
 	Message string `json:"message"`
 }
 
-func (r CustomResponse) Success(data interface{}, w http.ResponseWriter) {
+func (c *CustomResponse) Success(data interface{}, w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 
-	err := json.NewEncoder(w).Encode(ResponseData{
+	res := ResponseData{
 		Meta: Meta{
 			Code:    http.StatusOK,
 			Message: "ok",
 		},
 		Data: data,
-	})
-	if err != nil {
-		http.Error(w, "could not encode success response", http.StatusInternalServerError)
 	}
+
+	_ = json.NewEncoder(w).Encode(res)
+
+	c.logging(res, slog.LevelInfo, r)
 }
 
-func (r CustomResponse) BadRequest(err error, w http.ResponseWriter) {
+func (c *CustomResponse) BadRequest(err error, w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusBadRequest)
 
-	err = json.NewEncoder(w).Encode(ResponseData{
+	res := ResponseData{
 		Meta: Meta{
 			Code:    http.StatusBadRequest,
 			Message: err.Error(),
 		},
-	})
-	if err != nil {
-		http.Error(w, "could not encode success response", http.StatusInternalServerError)
 	}
+
+	_ = json.NewEncoder(w).Encode(res)
+
+	c.logging(res, slog.LevelError, r)
 }
 
-func (r CustomResponse) InternalServerError(err error, w http.ResponseWriter) {
+func (c *CustomResponse) InternalServerError(err error, w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusInternalServerError)
 
-	err = json.NewEncoder(w).Encode(ResponseData{
+	res := ResponseData{
 		Meta: Meta{
 			Code:    http.StatusInternalServerError,
 			Message: err.Error(),
 		},
-	})
-	if err != nil {
-		http.Error(w, "could not encode success response", http.StatusInternalServerError)
 	}
+
+	_ = json.NewEncoder(w).Encode(res)
+
+	c.logging(res, slog.LevelError, r)
 }
 
-func (r CustomResponse) Unauthorized(err error, w http.ResponseWriter) {
+func (c *CustomResponse) Unauthorized(err error, w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusUnauthorized)
 
-	err = json.NewEncoder(w).Encode(ResponseData{
+	res := ResponseData{
 		Meta: Meta{
 			Code:    http.StatusUnauthorized,
 			Message: err.Error(),
 		},
-	})
-	if err != nil {
-		http.Error(w, "could not encode success response", http.StatusInternalServerError)
 	}
+
+	_ = json.NewEncoder(w).Encode(res)
+
+	c.logging(res, slog.LevelError, r)
+}
+
+func (c *CustomResponse) logging(res ResponseData, logLevel slog.Level, r *http.Request) {
+	body, _ := io.ReadAll(r.Body)
+	slog.LogAttrs(
+		context.Background(),
+		logLevel,
+		"request succeed",
+		slog.Group("request",
+			"method", r.Method,
+			"uri", r.RequestURI,
+			"request_body", body),
+		slog.Group("response",
+			"code", res.Meta.Code,
+			"message", res.Meta.Message,
+			"data", res.Data),
+	)
 }
