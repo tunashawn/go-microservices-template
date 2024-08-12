@@ -90,7 +90,7 @@ func (c *CustomResponse) logging(res ResponseData, logLevel slog.Level, r *http.
 	slog.LogAttrs(
 		context.Background(),
 		logLevel,
-		"request succeed",
+		res.Meta.Message,
 		slog.Group("request",
 			"method", r.Method,
 			"uri", r.RequestURI,

@@ -15,7 +15,7 @@ type ServiceImpl struct {
 }
 
 func (s *ServiceImpl) Ping() (string, error) {
-	return "", errors.New("something happened")
+	return "oke", nil
 }
 
 func NewService() (Service, error) {

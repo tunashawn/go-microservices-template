@@ -43,7 +43,7 @@ in writing go microservices.
        ```json
          "time": "2024-08-11T18:51:04.946485+07:00",
          "level": "INFO",
-         "msg": "request succeed",
+         "msg": "ok",
          "request": {
              "method": "GET",
              "uri": "/ping",
@@ -61,7 +61,7 @@ in writing go microservices.
        ```json
        "time": "2024-08-11T19:28:16.54059+07:00",
        "level": "ERROR",
-       "msg": "request succeed",
+       "msg": "something happened",
        "request": {
            "method": "GET",
            "uri": "/ping",
