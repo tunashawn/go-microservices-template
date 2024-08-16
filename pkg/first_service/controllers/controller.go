@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"go-microservices-template/internal/response"
-	"go-microservices-template/pkg/service_A/services"
+	"go-microservices-template/pkg/first_service/services"
 	"net/http"
 )
 

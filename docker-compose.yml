@@ -1,0 +1,11 @@
+version: '1'
+services:
+  first_service:
+    env_file:
+      - "envconfig.yml"
+    build:
+      context: .
+      args:
+        SERVICE_NAME: first_service
+    ports:
+      - "8081:8080"

@@ -2,7 +2,7 @@ package services
 
 import (
 	"github.com/pkg/errors"
-	"go-microservices-template/pkg/service_A/repository"
+	"go-microservices-template/pkg/first_service/repository"
 )
 
 type Service interface {

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"go-microservices-template/pkg/service_A/controllers"
+	"go-microservices-template/pkg/first_service/controllers"
 	"log"
 	"log/slog"
 	"net/http"
